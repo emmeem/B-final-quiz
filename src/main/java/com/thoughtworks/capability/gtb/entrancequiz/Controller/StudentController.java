@@ -2,9 +2,7 @@ package com.thoughtworks.capability.gtb.entrancequiz.Controller;
 
 import com.thoughtworks.capability.gtb.entrancequiz.Domain.Group;
 import com.thoughtworks.capability.gtb.entrancequiz.Domain.Student;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.thoughtworks.capability.gtb.entrancequiz.Utils.StudentList;
 
 import java.util.List;
@@ -26,5 +24,11 @@ public class StudentController {
         return groups.getStudentGroups();
     }
 
+    @PostMapping("/student/{studentName}")
+    @CrossOrigin
+    public void addStudent(@PathVariable("studentName") String studentName) {
+        StudentList studentList = new StudentList();
+        studentList.addStudent(studentName);
+    }
 
 }

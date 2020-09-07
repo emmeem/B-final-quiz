@@ -48,8 +48,12 @@ public class StudentList {
             }
             restStudents = restStudents - 1;
         }
-
-
         return studentGroup;
+    }
+
+    public void addStudent(String name) {
+        List<Student> student = initStudentList();
+        int stuIndex = studentName.length +1 ;
+        studentName[stuIndex] = name;
     }
 }
