@@ -36,8 +36,8 @@ public class StudentController {
 
     @PutMapping("/team/{teamName}")
     @CrossOrigin
-    public void ChangeTeamName(@PathVariable("studentName") String teamName) {
-
+    public void changeTeamName(@PathVariable("studentName") String teamName) {
+        studentList.changeTeamName(teamName);
     }
 
 }

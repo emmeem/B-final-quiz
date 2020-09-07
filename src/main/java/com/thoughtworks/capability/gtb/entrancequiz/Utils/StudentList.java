@@ -57,5 +57,8 @@ public class StudentList {
         studentName[stuIndex] = name;
     }
 
+    public void changeTeamName(String name) {
+       
+    }
 
 }
