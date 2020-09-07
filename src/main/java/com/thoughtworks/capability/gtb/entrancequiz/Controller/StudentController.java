@@ -10,25 +10,34 @@ import java.util.List;
 @RestController
 public class StudentController {
 
+    private  final  StudentList studentList;
+
+    public StudentController(StudentList studentList) {
+        this.studentList = studentList;
+    }
+
     @GetMapping("/students")
     @CrossOrigin
     public List<Student> getStudentList() {
-        StudentList initStudentList = new StudentList();
-        return initStudentList.initStudentList();
+        return studentList.initStudentList();
     }
 
     @GetMapping("/groups")
     @CrossOrigin
     public List<Group> getGroups() {
-        StudentList groups = new StudentList();
-        return groups.getStudentGroups();
+        return studentList.getStudentGroups();
     }
 
     @PostMapping("/student/{studentName}")
     @CrossOrigin
     public void addStudent(@PathVariable("studentName") String studentName) {
-        StudentList studentList = new StudentList();
         studentList.addStudent(studentName);
+    }
+
+    @PutMapping("/team/{teamName}")
+    @CrossOrigin
+    public void ChangeTeamName(@PathVariable("studentName") String teamName) {
+
     }
 
 }

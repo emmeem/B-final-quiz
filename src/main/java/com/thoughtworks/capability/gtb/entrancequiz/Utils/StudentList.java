@@ -56,4 +56,6 @@ public class StudentList {
         int stuIndex = studentName.length +1 ;
         studentName[stuIndex] = name;
     }
+
+
 }
