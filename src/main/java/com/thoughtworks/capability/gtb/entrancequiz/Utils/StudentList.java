@@ -24,7 +24,7 @@ public class StudentList {
     public List<Group> getStudentGroups() {
         List<Student> student = initStudentList();
         Collections.shuffle(student);
-        int stuSize =student.size();
+        int stuSize = student.size();
         int initGroup = stuSize/6;
         int restStudents = 0;
         if(initGroup*6 < stuSize) {
@@ -33,23 +33,22 @@ public class StudentList {
         List<Group> studentGroup = new ArrayList<>();
         for(int i=0; i<6; i++) {
             List<Student> mid = new ArrayList<>();
-            for(int j=0; j<initGroup; j++) {
-                mid.add(student.get(i*initGroup+j));
-            }
-            Group tmp = new Group("Group"+(i+1),mid);
-            studentGroup.add(tmp);
-        }
-        if(restStudents > 0) {
-            for(int i=0; i<6; i++) {
-                List<Student> mid = new ArrayList<>();
-                for(int j=0; j<initGroup; j++) {
-                    mid.add(student.get(i*initGroup+j));
+            if(restStudents > 0) {
+                for (int j = 0; j < initGroup + 1; j++) {
+                    mid.add(student.get(i * initGroup + j));
                 }
-                Group tmp = new Group("Group"+(i+1),mid);
+                Group tmp = new Group("Group" + (i + 1), mid);
+                studentGroup.add(tmp);
+            } else{
+                for (int j = 0; j < initGroup ; j++) {
+                    mid.add(student.get(i * initGroup + j));
+                }
+                Group tmp = new Group("Group" + (i + 1), mid);
                 studentGroup.add(tmp);
             }
-            restStudents -= 1;
+            restStudents = restStudents - 1;
         }
+
 
         return studentGroup;
     }
