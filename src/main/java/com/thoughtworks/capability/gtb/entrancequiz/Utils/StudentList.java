@@ -12,7 +12,7 @@ public class StudentList {
             "谌哲", "董翔锐", "陈泰宇", "赵允齐", "张柯", "廖文强", "刘轲", "廖浚斌", "凌凤仪"};
     public List<Student> initStudentList() {
         List<Student> studentList = new ArrayList<>();
-        for(int i=0; i<35; i++) {
+        for(int i=0; i<studentName.length; i++) {
             Student s1 = new Student();
             s1.setId(i+1);
             s1.setStudentName(studentName[i]);
@@ -25,13 +25,14 @@ public class StudentList {
         List<Student> student = initStudentList();
         Collections.shuffle(student);
         int stuSize = student.size();
-        int initGroup = stuSize/6;
+        int groupNum = 6;
+        int initGroup = stuSize/groupNum;
         int restStudents = 0;
-        if(initGroup*6 < stuSize) {
-            restStudents = stuSize - initGroup*6;
+        if(initGroup*groupNum < stuSize) {
+            restStudents = stuSize - initGroup*groupNum;
         }
         List<Group> studentGroup = new ArrayList<>();
-        for(int i=0; i<6; i++) {
+        for(int i=0; i<groupNum; i++) {
             List<Student> mid = new ArrayList<>();
             if(restStudents > 0) {
                 for (int j = 0; j < initGroup + 1; j++) {
