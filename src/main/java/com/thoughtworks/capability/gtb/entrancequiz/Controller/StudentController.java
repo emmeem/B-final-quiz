@@ -3,41 +3,43 @@ package com.thoughtworks.capability.gtb.entrancequiz.Controller;
 import com.thoughtworks.capability.gtb.entrancequiz.Domain.Group;
 import com.thoughtworks.capability.gtb.entrancequiz.Domain.Student;
 import org.springframework.web.bind.annotation.*;
-import com.thoughtworks.capability.gtb.entrancequiz.Utils.StudentList;
+import com.thoughtworks.capability.gtb.entrancequiz.Service.StudentService;
 
 import java.util.List;
 
 @RestController
 public class StudentController {
 
+    private final StudentService studentService;
+
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
     @GetMapping("/students")
     @CrossOrigin
     public List<Student> getStudentList() {
-        StudentList studentList = new StudentList();
-        return studentList.initStudentList();
+        return studentService.getStudents();
     }
 
     @GetMapping("/groups")
     @CrossOrigin
     public List<Group> getGroups() {
-        StudentList studentList = new StudentList();
-        return studentList.getStudentGroups();
+        return studentService.getGroups();
     }
 
 
-    @PostMapping("/student/{studentName}")
+    @PostMapping("/students")
     @CrossOrigin
-    public void addStudent(@PathVariable("studentName") String studentName) {
-        StudentList studentList = new StudentList();
-        studentList.addStudent(studentName);
+    public void addStudent(@RequestBody String name) {
+        studentService.addStudent(name);
     }
 
 
-    @PutMapping("/team/{teamName}")
+    @PutMapping("/groups/{oldName}")
     @CrossOrigin
-    public void changeTeamName(@PathVariable("studentName") String teamName) {
-        StudentList studentList = new StudentList();
-        studentList.changeTeamName(teamName);
+    public void changeGroupName(@PathVariable String oldName, @RequestBody String newName) {
+        studentService.changeGroupName(oldName, newName);
     }
 
 }

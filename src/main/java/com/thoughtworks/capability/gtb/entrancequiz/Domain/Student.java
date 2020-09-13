@@ -2,7 +2,12 @@ package com.thoughtworks.capability.gtb.entrancequiz.Domain;
 
 public class Student {
     private int id;
-    private String studentName;
+    private String name;
+
+    public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public int getId() {
         return id;
@@ -13,11 +18,11 @@ public class Student {
     }
 
     public String getStudentName() {
-        return studentName;
+        return name;
     }
 
     public void setStudentName(String studentName) {
-        this.studentName = studentName;
+        this.name = name;
     }
 
 }

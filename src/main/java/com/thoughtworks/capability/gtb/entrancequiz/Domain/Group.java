@@ -3,20 +3,20 @@ package com.thoughtworks.capability.gtb.entrancequiz.Domain;
 import java.util.List;
 
 public class Group {
-    private String groupName;
+    private String name;
     List<Student> students;
 
     public Group(String groupName, List<Student> students){
-        this.groupName = groupName;
+        this.name = name;
         this.students = students;
     }
 
     public String getGroupName() {
-        return groupName;
+        return name;
     }
 
     public void setGroupName(String groupName) {
-        this.groupName = groupName;
+        this.name = name;
     }
 
     public List<Student> getStudents() {
