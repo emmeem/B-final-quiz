@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import com.thoughtworks.capability.gtb.entrancequiz.service.TraineeService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -17,6 +18,12 @@ public class TraineeController {
     public TraineeController(TraineeService traineeService) {
 
         this.traineeService = traineeService;
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<Trainee> getTrainees() {
+        return traineeService.getAllTrainee();
     }
 
     @PostMapping

@@ -5,6 +5,7 @@ import com.thoughtworks.capability.gtb.entrancequiz.exception.TrainerIsNotExistE
 import com.thoughtworks.capability.gtb.entrancequiz.repository.TrainerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +16,10 @@ public class TrainerService {
     public TrainerService(TrainerRepository trainerRepository) {
 
         this.trainerRepository = trainerRepository;
+    }
+
+    public List<Trainer> getAllTrainer() {
+        return trainerRepository.findAll();
     }
 
     public Trainer addTrainer(Trainer trainer) {

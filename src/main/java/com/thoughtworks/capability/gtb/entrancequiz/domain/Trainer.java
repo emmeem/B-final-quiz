@@ -16,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 public class Trainer {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 

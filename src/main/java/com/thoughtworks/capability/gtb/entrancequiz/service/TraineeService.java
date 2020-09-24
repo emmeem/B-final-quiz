@@ -5,6 +5,7 @@ import com.thoughtworks.capability.gtb.entrancequiz.exception.TraineeIsNotExistE
 import com.thoughtworks.capability.gtb.entrancequiz.repository.TraineeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -15,6 +16,10 @@ public class TraineeService {
     public TraineeService(TraineeRepository traineeRepository) {
 
         this.traineeRepository = traineeRepository;
+    }
+
+    public List<Trainee> getAllTrainee() {
+        return traineeRepository.findAll();
     }
 
     public Trainee addTrainee(Trainee trainee) {

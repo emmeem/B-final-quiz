@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -17,6 +18,12 @@ public class TrainerController {
     public TrainerController(TrainerService trainerService) {
 
         this.trainerService = trainerService;
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<Trainer> getTrainers() {
+        return trainerService.getAllTrainer();
     }
 
     @PostMapping
