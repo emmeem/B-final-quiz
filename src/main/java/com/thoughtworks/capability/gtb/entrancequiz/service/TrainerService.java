@@ -18,6 +18,11 @@ public class TrainerService {
         this.trainerRepository = trainerRepository;
     }
 
+    public Trainer getTrainer(long id) {
+        return trainerRepository.findById(id).get();
+    }
+
+
     public List<Trainer> getAllTrainer() {
         return trainerRepository.findAll();
     }
