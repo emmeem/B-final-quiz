@@ -24,7 +24,7 @@ public class TraineeService {
     public void deleteTrainee(long id) {
         Optional<Trainee> trainee = traineeRepository.findById(id);
         if(!trainee.isPresent()) {
-            throw new TraineeIsNotExistException("用户不存在");
+            throw new TraineeIsNotExistException("学员不存在");
         }
         traineeRepository.deleteById(id);
     }
