@@ -14,9 +14,9 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Trainer {
+public class GtbGroup {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
