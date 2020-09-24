@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/trainees")
 public class TraineeController {
 
     private final TraineeService traineeService;
@@ -18,10 +19,17 @@ public class TraineeController {
         this.traineeService = traineeService;
     }
 
-    @PostMapping("/trainees")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Trainee addTrainee(@RequestBody @Valid Trainee trainee) {
         return traineeService.addTrainee(trainee);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTrainee(@PathVariable long id) {
+        traineeService.deleteTrainee(id);
+    }
+
 
 }
