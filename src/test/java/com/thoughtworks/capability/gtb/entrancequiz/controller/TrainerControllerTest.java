@@ -34,8 +34,6 @@ public class TrainerControllerTest {
     private TrainerService trainerService;
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private JacksonTester<Trainer> userJson;
 
     private Trainer trainer;
     private long trainer_id;
@@ -59,20 +57,17 @@ public class TrainerControllerTest {
     @Nested
     class getTrainers{
         @Test
-        public void should_return_trainer_id_when_add_trainer() throws Exception {
+        public void should_return_trainers() throws Exception {
             List<Trainer> trainers = new ArrayList<>();
             trainers.add(trainer);
 
             when(trainerService.getAllTrainer()).thenReturn(trainers);
 
-            String jsonData = objectMapper.writeValueAsString(trainer);
             mockMvc.perform(get("/trainers"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$[0].name", is("Panda")));
         }
-
     }
-
 
     @Nested
     class addTrainer{
@@ -92,7 +87,6 @@ public class TrainerControllerTest {
     class deleteTrainer{
         @Test
         public void should_delete_trainer() throws Exception {
-
             mockMvc.perform(delete("/trainers/{id}",trainer_id))
                     .andExpect(status().isNoContent());
         }
