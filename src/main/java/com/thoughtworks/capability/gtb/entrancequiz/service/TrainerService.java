@@ -18,6 +18,7 @@ public class TrainerService {
         this.trainerRepository = trainerRepository;
     }
 
+    //TODO GTB：删掉未使用的方法
     public Trainer getTrainer(long id) {
         return trainerRepository.findById(id).get();
     }
