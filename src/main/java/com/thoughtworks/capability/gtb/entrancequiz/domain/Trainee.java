@@ -1,6 +1,6 @@
 package com.thoughtworks.capability.gtb.entrancequiz.domain;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,33 +8,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 public class Trainee {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
-    @NotEmpty
     private String name;
 
-    @NotEmpty
     private String office;
 
-    @Email
-    @NotEmpty
     private String email;
 
-    @NotEmpty
     private String github;
 
-    @NotEmpty
     private String zoomId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
+    @JsonIgnore
+    private GtbGroup group;
+
 }

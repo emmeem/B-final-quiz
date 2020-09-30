@@ -1,11 +1,16 @@
 package com.thoughtworks.capability.gtb.entrancequiz.controller;
 
 import com.thoughtworks.capability.gtb.entrancequiz.domain.GtbGroup;
+import com.thoughtworks.capability.gtb.entrancequiz.dto.ChangeGroupNameDto;
+import com.thoughtworks.capability.gtb.entrancequiz.dto.GroupDto;
 import com.thoughtworks.capability.gtb.entrancequiz.service.GroupService;
+import com.thoughtworks.capability.gtb.entrancequiz.utils.ConvertTool;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-//TODO GTB：自动分组和组重命名的功能缺失
+
 @RestController
 @CrossOrigin
 @RequestMapping("/groups")
@@ -17,11 +22,25 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    //TODO GTB：为啥用PostMapping？
-    @PostMapping
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<GtbGroup> getGroups() {
-        return groupService.getGroups();
+    public List<GroupDto> getGroups() {
+        List<GtbGroup> gtbGroups = groupService.getGroups();
+        return ConvertTool.convertList(gtbGroups, GroupDto.class);
+    }
+
+    @PostMapping("/auto-grouping")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<GroupDto> autoGrouping() {
+        List<GtbGroup> groupingResult = groupService.autoGrouping();
+        return ConvertTool.convertList(groupingResult, GroupDto.class);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateGroupName(@RequestBody ChangeGroupNameDto changeGroupNameDto, @PathVariable long id) {
+        String newName = changeGroupNameDto.getName();
+        groupService.rename(newName, id);
     }
 
 }

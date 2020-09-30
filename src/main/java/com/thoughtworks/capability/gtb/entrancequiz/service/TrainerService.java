@@ -1,7 +1,10 @@
 package com.thoughtworks.capability.gtb.entrancequiz.service;
 
+import com.thoughtworks.capability.gtb.entrancequiz.domain.GtbGroup;
 import com.thoughtworks.capability.gtb.entrancequiz.domain.Trainer;
+import com.thoughtworks.capability.gtb.entrancequiz.exception.ExceptionMessage;
 import com.thoughtworks.capability.gtb.entrancequiz.exception.TrainerIsNotExistException;
+import com.thoughtworks.capability.gtb.entrancequiz.repository.GroupRepository;
 import com.thoughtworks.capability.gtb.entrancequiz.repository.TrainerRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,20 +15,20 @@ import java.util.Optional;
 public class TrainerService {
 
     private final TrainerRepository trainerRepository;
+    private final GroupRepository groupRepository;
 
-    public TrainerService(TrainerRepository trainerRepository) {
+    public TrainerService(TrainerRepository trainerRepository, GroupRepository groupRepository) {
 
         this.trainerRepository = trainerRepository;
+        this.groupRepository = groupRepository;
     }
 
-    //TODO GTB：删掉未使用的方法
-    public Trainer getTrainer(long id) {
-        return trainerRepository.findById(id).get();
-    }
-
-
-    public List<Trainer> getAllTrainer() {
-        return trainerRepository.findAll();
+    public List<Trainer> getTrainers(boolean grouped) {
+        List<GtbGroup> groups = groupRepository.findAll();
+        if(grouped) {
+            return trainerRepository.findAllByGroupIn(groups);
+        }
+        return trainerRepository.findAllByGroupEquals(null);
     }
 
     public Trainer addTrainer(Trainer trainer) {
@@ -35,7 +38,7 @@ public class TrainerService {
     public void deleteTrainer(long id) {
         Optional<Trainer> trainer = trainerRepository.findById(id);
         if(!trainer.isPresent()) {
-            throw new TrainerIsNotExistException("讲师不存在");
+            throw new TrainerIsNotExistException(ExceptionMessage.TRAINER_NOT_EXIST);
         }
         trainerRepository.deleteById(id);
     }

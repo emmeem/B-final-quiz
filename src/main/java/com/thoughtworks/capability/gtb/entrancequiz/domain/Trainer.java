@@ -1,5 +1,6 @@
 package com.thoughtworks.capability.gtb.entrancequiz.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +18,12 @@ import javax.validation.constraints.NotEmpty;
 public class Trainer {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
-    @NotEmpty
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
+    @JsonIgnore
+    private GtbGroup group;
 }

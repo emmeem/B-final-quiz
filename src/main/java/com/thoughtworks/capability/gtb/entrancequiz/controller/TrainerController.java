@@ -1,7 +1,9 @@
 package com.thoughtworks.capability.gtb.entrancequiz.controller;
 
 import com.thoughtworks.capability.gtb.entrancequiz.domain.Trainer;
+import com.thoughtworks.capability.gtb.entrancequiz.dto.TrainerDto;
 import com.thoughtworks.capability.gtb.entrancequiz.service.TrainerService;
+import com.thoughtworks.capability.gtb.entrancequiz.utils.ConvertTool;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,15 +24,16 @@ public class TrainerController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Trainer> getTrainers() {
-        return trainerService.getAllTrainer();
+    public List<TrainerDto> getTrainers(@RequestParam boolean grouped) {
+        List<Trainer> trainers = trainerService.getTrainers(grouped);
+        return ConvertTool.convertList(trainers, TrainerDto.class);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Trainer addTrainer(@RequestBody @Valid Trainer trainer) {
-
-        return trainerService.addTrainer(trainer);
+    public TrainerDto addTrainer(@RequestBody @Valid TrainerDto trainerDto) {
+       Trainer trainer = trainerService.addTrainer(ConvertTool.convertObject(trainerDto, Trainer.class));
+       return ConvertTool.convertObject(trainer, TrainerDto.class);
     }
 
     @DeleteMapping("/{id}")

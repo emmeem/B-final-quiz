@@ -1,6 +1,7 @@
 package com.thoughtworks.capability.gtb.entrancequiz.service;
 
 import com.thoughtworks.capability.gtb.entrancequiz.domain.Trainer;
+import com.thoughtworks.capability.gtb.entrancequiz.repository.GroupRepository;
 import com.thoughtworks.capability.gtb.entrancequiz.repository.TrainerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -16,13 +17,15 @@ public class TrainerServiceTest {
     private TrainerService trainerService;
     @Mock
     private TrainerRepository trainerRepository;
+    @Mock
+    private GroupRepository groupRepository;
 
     private Trainer trainer;
     private long trainer_id;
 
     @BeforeEach
     void setUp() {
-        trainerService = new TrainerService(trainerRepository);
+        trainerService = new TrainerService(trainerRepository,groupRepository);
         trainer = trainer.builder()
                 .id(123L)
                 .name("Panda")

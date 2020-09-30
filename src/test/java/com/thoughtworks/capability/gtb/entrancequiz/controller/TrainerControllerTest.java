@@ -61,7 +61,7 @@ public class TrainerControllerTest {
             List<Trainer> trainers = new ArrayList<>();
             trainers.add(trainer);
 
-            when(trainerService.getAllTrainer()).thenReturn(trainers);
+            when(trainerService.getTrainers(false)).thenReturn(trainers);
 
             mockMvc.perform(get("/trainers"))
                     .andExpect(status().isOk())

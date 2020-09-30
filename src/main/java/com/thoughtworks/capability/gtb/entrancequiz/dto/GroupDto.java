@@ -1,32 +1,29 @@
-package com.thoughtworks.capability.gtb.entrancequiz.domain;
+package com.thoughtworks.capability.gtb.entrancequiz.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.thoughtworks.capability.gtb.entrancequiz.domain.Trainee;
+import com.thoughtworks.capability.gtb.entrancequiz.domain.Trainer;
+import com.thoughtworks.capability.gtb.entrancequiz.exception.ExceptionMessage;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Entity
-public class GtbGroup {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Valid
+public class GroupDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
-    @NotEmpty
+    @NotEmpty(message=ExceptionMessage.GROUP_NAME_NOT_EMPTY)
     private String name;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trainee> trainees;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trainer> trainers;
 }

@@ -63,7 +63,7 @@ public class TraineeControllerTest {
             List<Trainee> trainees = new ArrayList<>();
             trainees.add(trainee);
 
-            when(traineeService.getAllTrainee()).thenReturn(trainees);
+            when(traineeService.getTrainees(false)).thenReturn(trainees);
 
             mockMvc.perform(get("/trainees"))
                     .andExpect(status().isOk())
