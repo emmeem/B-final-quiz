@@ -37,6 +37,12 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
+    private void init() {
+        traineeRepository.clearGroupForeignKey();
+        trainerRepository.clearGroupForeignKey();
+        groupRepository.deleteAll();
+    }
+
     @Transactional
     public List<GtbGroup> autoGrouping() {
         init();
@@ -45,6 +51,15 @@ public class GroupService {
         if (trainerNumber < GROUP_TRAINER_NUMBER) {
             throw new GroupingException(ExceptionMessage.GROUPING_TRAINER_COUNT_LESS_THAN_2);
         }
+        grouping();
+
+        return groupRepository.findAll();
+    }
+
+    public void grouping() {
+        List<Trainer> allTrainer = trainerRepository.findAll();
+        int trainerNumber = allTrainer.size();
+
         List<Trainee> allTrainee = traineeRepository.findAll();
         Collections.shuffle(allTrainee);
         Collections.shuffle(allTrainer);
@@ -77,17 +92,9 @@ public class GroupService {
             previousTraineeNumber += groupTraineeNumber;
             previousTrainerNumber += GROUP_TRAINER_NUMBER;
         }
-        return groupRepository.findAll();
-    }
-
-    private void init() {
-        traineeRepository.clearGroupForeignKey();
-        trainerRepository.clearGroupForeignKey();
-        groupRepository.deleteAll();
     }
 
     public void rename(String name, long id) {
-
         GtbGroup gtbGroup = groupRepository.findById(id)
                 .orElseThrow(() -> new GroupIsNotExistException(ExceptionMessage.GROUP_NOT_EXIST));
         groupRepository.findByName(name).ifPresent(s -> {
