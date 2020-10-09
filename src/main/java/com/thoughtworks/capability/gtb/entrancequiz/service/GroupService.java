@@ -3,6 +3,7 @@ package com.thoughtworks.capability.gtb.entrancequiz.service;
 import com.thoughtworks.capability.gtb.entrancequiz.domain.GtbGroup;
 import com.thoughtworks.capability.gtb.entrancequiz.domain.Trainee;
 import com.thoughtworks.capability.gtb.entrancequiz.domain.Trainer;
+import com.thoughtworks.capability.gtb.entrancequiz.dto.GroupNumDto;
 import com.thoughtworks.capability.gtb.entrancequiz.exception.*;
 import com.thoughtworks.capability.gtb.entrancequiz.repository.GroupRepository;
 import com.thoughtworks.capability.gtb.entrancequiz.repository.TraineeRepository;
@@ -37,68 +38,87 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
+    @Transactional
+    public List<GtbGroup> autoGrouping() {
+        init();
+        grouping();
+
+        return groupRepository.findAll();
+    }
+
     private void init() {
         traineeRepository.clearGroupForeignKey();
         trainerRepository.clearGroupForeignKey();
         groupRepository.deleteAll();
     }
 
-    @Transactional
-    public List<GtbGroup> autoGrouping() {
-        init();
-        List<Trainer> allTrainer = trainerRepository.findAll();
-        int trainerNumber = allTrainer.size();
-        if (trainerNumber < GROUP_TRAINER_NUMBER) {
-            throw new GroupingException(ExceptionMessage.GROUPING_TRAINER_COUNT_LESS_THAN_2);
-        }
-        grouping();
-
-        return groupRepository.findAll();
-    }
-
     public void grouping() {
-        List<Trainer> allTrainer = trainerRepository.findAll();
-        int trainerNumber = allTrainer.size();
+        GroupNumDto groupNumDto = new GroupNumDto();
+        initGroupNum(groupNumDto);
 
+        List<Trainer> allTrainer = trainerRepository.findAll();
+        Collections.shuffle(allTrainer);
         List<Trainee> allTrainee = traineeRepository.findAll();
         Collections.shuffle(allTrainee);
-        Collections.shuffle(allTrainer);
-        int traineeNumber = allTrainee.size();
-        int groupNumber = trainerNumber / GROUP_TRAINER_NUMBER;
-        int overflowTrainee = traineeNumber % groupNumber;
 
         int previousTraineeNumber = 0;
         int previousTrainerNumber = 0;
 
-        for (int groupId = 1; groupId <= groupNumber; groupId++) {
+        for (int groupId = 1; groupId <= groupNumDto.getGroupNum(); groupId++) {
             GtbGroup group = GtbGroup.builder().name(groupId + GROUP_NAME_SUFFIX).build();
-            int groupTraineeNumber = traineeNumber / groupNumber;
+            int groupTraineeNumber = groupNumDto.getTraineeNum() / groupNumDto.getGroupNum();
+            int overflowTrainee =  groupNumDto.getOverflowTrainee();
+
             if (overflowTrainee > 0) {
                 groupTraineeNumber += 1;
                 overflowTrainee -= 1;
             }
+
             List<Trainee> trainees = allTrainee.stream()
                     .skip(previousTraineeNumber)
                     .limit(groupTraineeNumber)
                     .peek(t -> t.setGroup(group)).collect(Collectors.toList());
+
             List<Trainer> trainers = allTrainer.stream()
                     .skip(previousTrainerNumber)
                     .limit(GROUP_TRAINER_NUMBER)
                     .peek(t -> t.setGroup(group)).collect(Collectors.toList());
+
             group.setTrainees(trainees);
             group.setTrainers(trainers);
-
             groupRepository.save(group);
+
             previousTraineeNumber += groupTraineeNumber;
             previousTrainerNumber += GROUP_TRAINER_NUMBER;
         }
     }
 
+    public void initGroupNum(GroupNumDto groupNumDto) {
+        List<Trainer> allTrainer = trainerRepository.findAll();
+        int trainerNum = allTrainer.size();
+        groupNumDto.setTrainerNum(trainerNum);
+
+        if (groupNumDto.getTrainerNum() < GROUP_TRAINER_NUMBER) {
+            throw new GroupingException(ExceptionMessage.GROUPING_TRAINER_COUNT_LESS_THAN_2);
+        }
+
+        List<Trainee> allTrainee = traineeRepository.findAll();
+        int traineeNum = allTrainee.size();
+        int groupNumber = groupNumDto.getTrainerNum() / GROUP_TRAINER_NUMBER;
+        int overflowTrainee = groupNumDto.getTraineeNum() % groupNumber;
+
+        groupNumDto.setTraineeNum(traineeNum);
+        groupNumDto.setGroupNum(groupNumber);
+        groupNumDto.setOverflowTrainee(overflowTrainee);
+    }
+
     public void rename(String name, long id) {
         GtbGroup gtbGroup = groupRepository.findById(id)
                 .orElseThrow(() -> new GroupIsNotExistException(ExceptionMessage.GROUP_NOT_EXIST));
+
         groupRepository.findByName(name).ifPresent(s -> {
             throw new GroupIsRepeatException(ExceptionMessage.GROUP_NAME_HAS_EXIST);});
+
         gtbGroup.setName(name);
         groupRepository.save(gtbGroup);
     }
